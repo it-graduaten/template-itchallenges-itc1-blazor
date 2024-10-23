@@ -1,0 +1,117 @@
+﻿@page "/voorbeeld3"
+
+<h3>Galgje</h3>
+
+<p>@(new string(teRadenWoord))</p>
+
+@if (spelStatus == "gewonnen")
+{
+    <p style="color: green;">Gefeliciteerd! Je hebt het woord geraden!</p>
+    <button @onclick="NieuwSpel">Opnieuw spelen</button>
+}
+else if (spelStatus == "verloren")
+{
+    <p style="color: red;">Je hebt verloren. Het woord was: @doelwoord</p>
+    <button @onclick="NieuwSpel">Opnieuw spelen</button>
+}
+else
+{
+    <p>Raden:</p>
+
+    @foreach (char letter in alfabet)
+    {
+        <button @onclick="() => RaadLetter(letter)" disabled="@geradenLetters.Contains(letter)" class="letter-button">
+            @letter
+        </button>
+    }
+
+    <p>Gemaakte fouten: @foutTellen / @maxFouten</p>
+
+    <p>@(new MarkupString(hangmanStage))</p>
+
+    <p><strong>Gekozen letters:</strong> @string.Join(", ", geradenLetters)</p>
+}
+
+@code {
+    string[] woordenlijst = { "computer", "programma", "framework", "blazor", "hangman", "webassembly" };
+    string doelwoord;
+    char[] teRadenWoord;
+    HashSet<char> geradenLetters = new HashSet<char>();
+    int foutTellen = 0;
+    int maxFouten = 6;
+    string spelStatus = "spel bezig";
+    string hangmanStage = "";
+    char[] alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLower().ToCharArray();
+
+    protected override void OnInitialized()
+    {
+        NieuwSpel();
+    }
+
+    void NieuwSpel()
+    {
+        Random random = new Random();
+        doelwoord = woordenlijst[random.Next(woordenlijst.Length)];
+        teRadenWoord = new string('_', doelwoord.Length).ToCharArray();
+        geradenLetters.Clear();
+        foutTellen = 0;
+        spelStatus = "spel bezig";
+        hangmanStage = "";
+    }
+
+    void RaadLetter(char letter)
+    {
+        if (doelwoord.Contains(letter))
+        {
+            for (int i = 0; i < doelwoord.Length; i++)
+            {
+                if (doelwoord[i] == letter)
+                {
+                    teRadenWoord[i] = letter;
+                }
+            }
+
+            if (!teRadenWoord.Contains('_'))
+            {
+                spelStatus = "gewonnen";
+            }
+        }
+        else
+        {
+            foutTellen++;
+            UpdateHangmanStage();
+
+            if (foutTellen >= maxFouten)
+            {
+                spelStatus = "verloren";
+            }
+        }
+
+        geradenLetters.Add(letter);
+    }
+
+    void UpdateHangmanStage()
+    {
+        switch (foutTellen)
+        {
+            case 1:
+                hangmanStage = "O<br />"; // hoofd
+                break;
+            case 2:
+                hangmanStage = "O<br />|<br />"; // lichaam
+                break;
+            case 3:
+                hangmanStage = "O<br />/|<br />"; // arm links
+                break;
+            case 4:
+                hangmanStage = "O<br />/|\\<br />"; // arm rechts
+                break;
+            case 5:
+                hangmanStage = "O<br />/|\\<br />/<br />"; // been links
+                break;
+            case 6:
+                hangmanStage = "O<br />/|\\<br />/ \\<br />"; // been rechts
+                break;
+        }
+    }
+}

@@ -1,0 +1,60 @@
+﻿@page "/voorbeeld2"
+
+<h3>Raad het getal!</h3>
+
+<p>Ik heb een getal gekozen tussen 1 en 100. Probeer het te raden!</p>
+
+@if (gameOver)
+{
+    <p>Gefeliciteerd! Je hebt het juiste getal geraden: @targetNumber</p>
+    <button @onclick="StartNewGame">Opnieuw spelen</button>
+}
+else
+{
+    <p>Voer een getal in:</p>
+    <input @bind="guess" type="number" min="1" max="100" />
+    <button @onclick="ControleerGok">Controleer</button>
+
+    @if (!string.IsNullOrEmpty(feedback))
+    {
+        <p>@feedback</p>
+    }
+}
+
+@code {
+    int targetNumber;
+    int guess;
+    string feedback;
+    bool gameOver = false;
+    Random random = new Random();
+
+    protected override void OnInitialized()
+    {
+        StartNewGame();
+    }
+
+    void StartNewGame()
+    {
+        targetNumber = random.Next(1, 101); // Getal tussen 1 en 100
+        feedback = string.Empty;
+        gameOver = false;
+        guess = 0;
+    }
+
+    void ControleerGok()
+    {
+        if (guess == targetNumber)
+        {
+            feedback = "Goed geraden!";
+            gameOver = true;
+        }
+        else if (guess < targetNumber)
+        {
+            feedback = "Hoger!";
+        }
+        else
+        {
+            feedback = "Lager!";
+        }
+    }
+}

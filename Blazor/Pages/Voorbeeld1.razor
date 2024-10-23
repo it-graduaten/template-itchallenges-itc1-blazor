@@ -1,0 +1,27 @@
+@page "/voorbeeld1"
+<h3>Som van Twee Getallen</h3>
+ 
+<label for="getal1">Getal 1:</label>
+<input type="number" @bind="getal1" />
+ 
+<br />
+ 
+<label for="getal2">Getal 2:</label>
+<input type="number" @bind="getal2" />
+ 
+<br />
+ 
+<button @onclick="BerekenSom">Bereken Som</button>
+ 
+<p>De som is: @som</p>
+ 
+@code {
+    private int getal1;
+    private int getal2;
+    private int som;
+ 
+    private void BerekenSom()
+    {
+        som = getal1 + getal2;
+    }
+}
