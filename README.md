@@ -3,7 +3,7 @@
 ## Wat is Blazor?
 Blazor is een webframework ontwikkeld door Microsoft waarmee je webapplicaties kunt bouwen in C# in plaats van de traditionele talen zoals JavaScript. 
 
-Er zijn twee varianten van Blazor: Blazor WebAssembly Stand-alone en Blazor Server. Voor dit project maak je een Blazor WebAssembly Standalone project.
+Er zijn twee varianten van Blazor: Blazor WebAssembly Stand-alone en Blazor WebApp. Voor dit project maak je een Blazor WebAssembly Standalone project.
 
 In Blazor zit bootstrap standaard geïntegreerd. Een Blazor-applicatie bestaat uit razor-pages waarop je html en C# kunt combineren. Je kunt op die manier voor je output en input gebruik maken van html-elementen. 
 
